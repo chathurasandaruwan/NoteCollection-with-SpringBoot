@@ -1,9 +1,11 @@
 package lk.ijse.NoteCollecter_V2.controller;
 
 import lk.ijse.NoteCollecter_V2.dto.impl.UserDTO;
+import lk.ijse.NoteCollecter_V2.entity.Role;
 import lk.ijse.NoteCollecter_V2.exeption.DataPersistException;
 import lk.ijse.NoteCollecter_V2.secure.JWTAuthResponse;
 import lk.ijse.NoteCollecter_V2.secure.SignIn;
+import lk.ijse.NoteCollecter_V2.service.AuthService;
 import lk.ijse.NoteCollecter_V2.service.UserService;
 import lk.ijse.NoteCollecter_V2.util.AppUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class AuthUserController {
     private final UserService userService;
-    // private final AuthService authService;
+     private final AuthService authService;
     private final PasswordEncoder passwordEncoder;
     @PostMapping(value = "signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -28,6 +30,7 @@ public class AuthUserController {
             @RequestPart("lastName") String lastName,
             @RequestPart("email") String email,
             @RequestPart("password") String password,
+            @RequestPart("role") String role,
             @RequestPart("profilePic") MultipartFile profilePic
     ) {
         // profilePic ----> Base64
@@ -45,9 +48,9 @@ public class AuthUserController {
             buildUserDTO.setEmail(email);
             buildUserDTO.setPassword(passwordEncoder.encode(password));
             buildUserDTO.setProfilePic(base64ProPic);
-            //Todo: Chane with auth user service
-            userService.saveUser(buildUserDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            buildUserDTO.setRole(Role.valueOf(role));
+            return ResponseEntity.ok(authService.signUp(buildUserDTO));
+//            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (DataPersistException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
