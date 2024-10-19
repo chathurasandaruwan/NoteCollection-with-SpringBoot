@@ -2,6 +2,7 @@ package lk.ijse.NoteCollecter_V2.service;
 
 import lk.ijse.NoteCollecter_V2.dto.UserStatus;
 import lk.ijse.NoteCollecter_V2.dto.impl.UserDTO;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface UserService {
     UserStatus getSelectedUser(String userId);
     void deleteUser(String userId);
     void updateUser(UserDTO userDTO ,String userId);
+    UserDetailsService userDetailsService();
 }
