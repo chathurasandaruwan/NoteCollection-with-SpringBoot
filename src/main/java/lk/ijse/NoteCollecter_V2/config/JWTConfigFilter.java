@@ -30,6 +30,7 @@ public class JWTConfigFilter extends OncePerRequestFilter {
         String extractedToken;
         if (StringUtils.isEmpty(token) || !token.startsWith("Bearer")) {
             filterChain.doFilter(request, response);
+            return;
         }
         extractedToken = token.substring(7);
         UserEmail = jwtService.extractUsername(extractedToken);
