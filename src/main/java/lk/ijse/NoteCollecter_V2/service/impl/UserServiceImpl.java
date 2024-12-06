@@ -53,7 +53,6 @@ public class UserServiceImpl implements UserService {
             userDAO.deleteById(userId);
         }
     }
-
     @Override
     public void updateUser(UserDTO userDTO,String userId) {
 //        userDAO.saveAndFlush(mapping.toUseEntity(userDTO));
